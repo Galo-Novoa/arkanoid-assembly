@@ -1,7 +1,7 @@
  
+.include "data/constants.inc"
 .include "utils/utils.asm"
 .include "logic/game_logic.asm"
-.include "data/constants.asm"
 
 .text
 .globl main
