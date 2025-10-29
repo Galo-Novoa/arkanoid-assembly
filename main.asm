@@ -4,7 +4,6 @@
 .include "logic/game_logic.asm"
 
 .text
-.globl main
 main:
 
     # clear buffers
