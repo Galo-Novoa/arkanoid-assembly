@@ -21,10 +21,11 @@ drawPaddleFast_loopX:
     add $t9, $t2, $t7
     add $s0, $t1, $t8
     
-    sll $s1, $t9, 6
-    add $s1, $s1, $s0
-    sll $s1, $s1, 2
-    add $s1, $t0, $s1
+    # Calcular offset: (y * 256 + x) * 4
+    sll $s1, $t9, 8      # y * 256
+    add $s1, $s1, $s0    # + x
+    sll $s1, $s1, 2      # * 4
+    add $s1, $t0, $s1    # + dirección base
     
     sw $t5, 0($s1)
     
@@ -59,10 +60,10 @@ clearPaddleFast_loopX:
     add $t9, $t2, $t7
     add $s0, $t1, $t8
     
-    sll $s1, $t9, 6
-    add $s1, $s1, $s0
-    sll $s1, $s1, 2
-    add $s1, $t0, $s1
+    sll $s1, $t9, 8      # y * 256
+    add $s1, $s1, $s0    # + x
+    sll $s1, $s1, 2      # * 4
+    add $s1, $t0, $s1    # + dirección base
     
     sw $t5, 0($s1)
     
@@ -83,10 +84,11 @@ drawBallFast:
     lw $t2, ballY
     lw $t3, ballColor
     
-    sll $t5, $t2, 6
-    add $t5, $t5, $t1
-    sll $t5, $t5, 2
-    add $t5, $t0, $t5
+    # Calcular offset: (y * 256 + x) * 4
+    sll $t5, $t2, 8      # y * 256
+    add $t5, $t5, $t1    # + x
+    sll $t5, $t5, 2      # * 4
+    add $t5, $t0, $t5    # + dirección base
     
     sw $t3, 0($t5)
     jr $ra
@@ -98,10 +100,10 @@ clearBallFast:
     lw $t2, ballY
     lw $t3, bgColor
     
-    sll $t5, $t2, 6
-    add $t5, $t5, $t1
-    sll $t5, $t5, 2
-    add $t5, $t0, $t5
+    sll $t5, $t2, 8      # y * 256
+    add $t5, $t5, $t1    # + x
+    sll $t5, $t5, 2      # * 4
+    add $t5, $t0, $t5    # + dirección base
     
     sw $t3, 0($t5)
     jr $ra

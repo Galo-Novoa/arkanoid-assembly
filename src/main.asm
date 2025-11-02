@@ -25,9 +25,9 @@ mainLoop:
     lw $t0, blocksRemaining
     beqz $t0, gameWon
 
-    # ========== DELAY MÁS RÁPIDO ==========
+    # ========== DELAY PARA 256x256 ==========
     li $v0, 32
-    li $a0, 16  # 16ms para ~60 FPS
+    li $a0, 20  # 20ms para mejor rendimiento en pantalla grande
     syscall
 
     j mainLoop

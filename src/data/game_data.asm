@@ -1,8 +1,8 @@
 .data
 # ==================== CONFIGURACIÓN ====================
-displayAddress: .word 0x10008000
-screenWidth: .word 64
-screenHeight: .word 64
+displayAddress: .word 0x10010000  # Más espacio de memoria
+screenWidth: .word 256
+screenHeight: .word 256
 
 # ==================== COLORES ====================
 bgColor: .word 0x00000000
@@ -14,32 +14,34 @@ blockColor3: .word 0x00FFFF00
 blockColor4: .word 0x0000FF00
 
 # ==================== PALETA ====================
-paddleX: .word 26
-paddleY: .word 56
-paddleWidth: .word 12
-paddleHeight: .word 3
-paddleSpeed: .word 3
+paddleX: .word 112
+paddleY: .word 240
+paddleWidth: .word 32
+paddleHeight: .word 4
+paddleSpeed: .word 4
 
 # ==================== PELOTA ====================
-ballX: .word 32
-ballY: .word 30
+ballX: .word 128
+ballY: .word 128
 ballVelX: .word 1
 ballVelY: .word -1
 
 # ==================== BLOQUES ====================
-blockWidth: .word 5
-blockHeight: .word 2
+blockWidth: .word 20
+blockHeight: .word 8
 blocksPerRow: .word 10
-blockRows: .word 4
-blockStartX: .word 2
-blockStartY: .word 4
+blockRows: .word 6
+blockStartX: .word 18
+blockStartY: .word 30
 
 blocks: .word 1,1,1,1,1,1,1,1,1,1
         .word 1,1,1,1,1,1,1,1,1,1
         .word 1,1,1,1,1,1,1,1,1,1
         .word 1,1,1,1,1,1,1,1,1,1
+        .word 1,1,1,1,1,1,1,1,1,1
+        .word 1,1,1,1,1,1,1,1,1,1
 
-blocksRemaining: .word 40
+blocksRemaining: .word 60
 
 # ==================== SISTEMA ====================
 score: .word 0

@@ -49,12 +49,12 @@ drawBlock:
     
     # Calcular posición X
     lw $t0, blockStartX
-    mul $t1, $a0, 6
+    mul $t1, $a0, 22      # 20px ancho + 2px espacio
     add $t4, $t0, $t1
     
     # Calcular posición Y
     lw $t0, blockStartY
-    mul $t1, $a1, 3
+    mul $t1, $a1, 10      # 8px alto + 2px espacio
     add $t5, $t0, $t1
     
     # Seleccionar color según fila
@@ -67,6 +67,12 @@ drawBlock:
     li $t7, 2
     beq $a1, $t7, drawBlock_color
     la $t6, blockColor4
+    li $t7, 3
+    beq $a1, $t7, drawBlock_color
+    la $t6, blockColor1
+    li $t7, 4
+    beq $a1, $t7, drawBlock_color
+    la $t6, blockColor2
 
 drawBlock_color:
     lw $t6, 0($t6)
@@ -87,10 +93,11 @@ drawBlock_loopX:
     add $s6, $t5, $s4
     add $s7, $t4, $s5
     
-    sll $t7, $s6, 6
-    add $t7, $t7, $s7
-    sll $t7, $t7, 2
-    add $t7, $t0, $t7
+    # Calcular offset: (y * 256 + x) * 4
+    sll $t7, $s6, 8      # y * 256
+    add $t7, $t7, $s7    # + x
+    sll $t7, $t7, 2      # * 4
+    add $t7, $t0, $t7    # + dirección base
     
     sw $t6, 0($t7)
     
@@ -112,11 +119,11 @@ eraseBlock:
     sw $ra, 0($sp)
     
     lw $t0, blockStartX
-    mul $t1, $a0, 6
+    mul $t1, $a0, 22      # 20px ancho + 2px espacio
     add $t4, $t0, $t1
     
     lw $t0, blockStartY
-    mul $t1, $a1, 3
+    mul $t1, $a1, 10      # 8px alto + 2px espacio
     add $t5, $t0, $t1
     
     lw $t0, displayAddress
@@ -136,10 +143,10 @@ eraseBlock_loopX:
     add $s6, $t5, $s4
     add $s7, $t4, $s5
     
-    sll $t7, $s6, 6
-    add $t7, $t7, $s7
-    sll $t7, $t7, 2
-    add $t7, $t0, $t7
+    sll $t7, $s6, 8      # y * 256
+    add $t7, $t7, $s7    # + x
+    sll $t7, $t7, 2      # * 4
+    add $t7, $t0, $t7    # + dirección base
     
     sw $t6, 0($t7)
     

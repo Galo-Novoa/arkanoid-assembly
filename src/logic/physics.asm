@@ -61,32 +61,32 @@ saveX:
     # Calcular zona (dividir paleta en 5 zonas)
     lw $t9, paddleWidth
     
-    # Zona 1: Extremo izquierdo (0-1) -> velX = -2
-    li $t0, 2
+    # Zona 1: Extremo izquierdo (0-7) -> velX = -4
+    li $t0, 8
     blt $t8, $t0, zone1
     
-    # Zona 2: Izquierda (2-4) -> velX = -1
-    li $t0, 5
+    # Zona 2: Izquierda (8-15) -> velX = -2
+    li $t0, 16
     blt $t8, $t0, zone2
     
-    # Zona 3: Centro (5-6) -> velX = 0
-    li $t0, 7
+    # Zona 3: Centro (16-23) -> velX = 0
+    li $t0, 24
     blt $t8, $t0, zone3
     
-    # Zona 4: Derecha (7-9) -> velX = 1
-    li $t0, 10
+    # Zona 4: Derecha (24-31) -> velX = 2
+    li $t0, 32
     blt $t8, $t0, zone4
     
-    # Zona 5: Extremo derecho (10-11) -> velX = 2
+    # Zona 5: Extremo derecho (32-39) -> velX = 4
     j zone5
 
 zone1:
-    li $t0, -2
+    li $t0, -4
     sw $t0, ballVelX
     j paddleBounce_done
 
 zone2:
-    li $t0, -1
+    li $t0, -2
     sw $t0, ballVelX
     j paddleBounce_done
 
@@ -96,12 +96,12 @@ zone3:
     j paddleBounce_done
 
 zone4:
-    li $t0, 1
+    li $t0, 2
     sw $t0, ballVelX
     j paddleBounce_done
 
 zone5:
-    li $t0, 2
+    li $t0, 4
     sw $t0, ballVelX
 
 paddleBounce_done:
@@ -154,22 +154,22 @@ respawn:
     syscall
     
     # Resetear posiciones
-    li $t0, 32
+    li $t0, 128
     sw $t0, ballX
-    li $t0, 30
+    li $t0, 120
     sw $t0, ballY
-    li $t0, 1
+    li $t0, 2
     sw $t0, ballVelX
-    li $t0, -1
+    li $t0, -2
     sw $t0, ballVelY
     
     # Centrar paleta
-    li $t0, 26
+    li $t0, 112
     sw $t0, paddleX
     
     # Pausa más corta
     li $v0, 32
-    li $a0, 1000  # 1 segundo en lugar de 2
+    li $a0, 1000
     syscall
     
     j moveBall_end

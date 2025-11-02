@@ -68,11 +68,11 @@ checkBlock_col:
     
     # Calcular posición del bloque
     lw $t7, blockStartX
-    mul $t8, $t2, 6
+    mul $t8, $t2, 22      # 20px ancho + 2px espacio
     add $s2, $t7, $t8
     
     lw $t7, blockStartY
-    mul $t8, $t0, 3
+    mul $t8, $t0, 12      # 10px alto + 2px espacio
     add $s3, $t7, $t8
     
     # Verificar colisión X
