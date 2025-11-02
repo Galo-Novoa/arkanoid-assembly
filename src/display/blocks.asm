@@ -1,6 +1,7 @@
 # ==================== DIBUJAR TODOS LOS BLOQUES ====================
 drawAllBlocks:
-    push_ra()
+    addiu $sp, $sp, -4
+    sw $ra, 0($sp)
     
     li $s0, 0
     lw $s1, blockRows
@@ -14,9 +15,7 @@ drawBlocks_col:
     bge $s2, $s3, drawBlocks_nextRow
     
     # Calcular índice
-    sll $t0, $s0, 3
-    sll $t1, $s0, 1
-    add $t0, $t0, $t1
+    mul $t0, $s0, 10
     add $t0, $t0, $s2
     sll $t0, $t0, 2
     
@@ -39,24 +38,23 @@ drawBlocks_nextRow:
     j drawBlocks_row
 
 drawBlocks_end:
-    pop_ra()
+    lw $ra, 0($sp)
+    addiu $sp, $sp, 4
     jr $ra
 
 # ==================== DIBUJAR UN BLOQUE ====================
 drawBlock:
-    push_ra()
+    addiu $sp, $sp, -4
+    sw $ra, 0($sp)
     
     # Calcular posición X
     lw $t0, blockStartX
-    sll $t1, $a0, 2
-    sll $t2, $a0, 1
-    add $t1, $t1, $t2
+    mul $t1, $a0, 6
     add $t4, $t0, $t1
     
     # Calcular posición Y
     lw $t0, blockStartY
-    add $t1, $a1, $a1
-    add $t1, $t1, $a1
+    mul $t1, $a1, 3
     add $t5, $t0, $t1
     
     # Seleccionar color según fila
@@ -104,22 +102,21 @@ drawBlock_nextY:
     j drawBlock_loopY
 
 drawBlock_end:
-    pop_ra()
+    lw $ra, 0($sp)
+    addiu $sp, $sp, 4
     jr $ra
 
 # ==================== BORRAR UN BLOQUE ====================
 eraseBlock:
-    push_ra()
+    addiu $sp, $sp, -4
+    sw $ra, 0($sp)
     
     lw $t0, blockStartX
-    sll $t1, $a0, 2
-    sll $t2, $a0, 1
-    add $t1, $t1, $t2
+    mul $t1, $a0, 6
     add $t4, $t0, $t1
     
     lw $t0, blockStartY
-    add $t1, $a1, $a1
-    add $t1, $t1, $a1
+    mul $t1, $a1, 3
     add $t5, $t0, $t1
     
     lw $t0, displayAddress
@@ -154,5 +151,6 @@ eraseBlock_nextY:
     j eraseBlock_loopY
 
 eraseBlock_done:
-    pop_ra()
+    lw $ra, 0($sp)
+    addiu $sp, $sp, 4
     jr $ra

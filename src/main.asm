@@ -1,40 +1,35 @@
-
-
-.include "utils/macros.asm"
 .include "data/game_data.asm"
 .include "data/messages.asm"
 
 .text
 .globl main
 
-# MAIN DEBE ESTAR ANTES de cualquier otro .text
 main:
     # Dibujar todos los bloques al inicio
     jal drawAllBlocks
-    j mainLoop
 
 mainLoop:
-    # Borrar posiciones anteriores
-    jal clearPaddle
-    jal clearBall
+    # ========== BORRAR ELEMENTOS ANTERIORES ==========
+    jal clearPaddleFast
+    jal clearBallFast
     
-    # Procesar entrada y física
+    # ========== PROCESAR ENTRADA Y FÍSICA ==========
     jal checkInput
     jal moveBall
-    
-    # Dibujar nuevas posiciones
-    jal drawPaddle
-    jal drawBall
-    
-    # Verificar victoria
+
+    # ========== DIBUJAR ELEMENTOS NUEVOS ==========
+    jal drawPaddleFast
+    jal drawBallFast
+
+    # ========== VERIFICAR VICTORIA ==========
     lw $t0, blocksRemaining
     beqz $t0, gameWon
-    
-    # Delay para controlar FPS
+
+    # ========== DELAY MÁS RÁPIDO ==========
     li $v0, 32
-    li $a0, 50
+    li $a0, 16  # 16ms para ~60 FPS
     syscall
-    
+
     j mainLoop
 
 gameWon:

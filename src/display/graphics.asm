@@ -1,6 +1,7 @@
-# ==================== DIBUJAR PALETA ====================
-drawPaddle:
-    push_ra()
+# ==================== FUNCIONES RÁPIDAS ====================
+
+# ==================== DIBUJAR PALETA RÁPIDO ====================
+drawPaddleFast:
     lw $t0, displayAddress
     lw $t1, paddleX
     lw $t2, paddleY
@@ -10,12 +11,12 @@ drawPaddle:
     
     li $t7, 0
 
-drawPaddle_loopY:
-    bge $t7, $t4, drawPaddle_end
+drawPaddleFast_loopY:
+    bge $t7, $t4, drawPaddleFast_end
     li $t8, 0
 
-drawPaddle_loopX:
-    bge $t8, $t3, drawPaddle_nextY
+drawPaddleFast_loopX:
+    bge $t8, $t3, drawPaddleFast_nextY
     
     add $t9, $t2, $t7
     add $s0, $t1, $t8
@@ -28,19 +29,17 @@ drawPaddle_loopX:
     sw $t5, 0($s1)
     
     addi $t8, $t8, 1
-    j drawPaddle_loopX
+    j drawPaddleFast_loopX
 
-drawPaddle_nextY:
+drawPaddleFast_nextY:
     addi $t7, $t7, 1
-    j drawPaddle_loopY
+    j drawPaddleFast_loopY
 
-drawPaddle_end:
-    pop_ra()
+drawPaddleFast_end:
     jr $ra
 
-# ==================== BORRAR PALETA ====================
-clearPaddle:
-    push_ra()
+# ==================== BORRAR PALETA RÁPIDO ====================
+clearPaddleFast:
     lw $t0, displayAddress
     lw $t1, paddleX
     lw $t2, paddleY
@@ -50,12 +49,12 @@ clearPaddle:
     
     li $t7, 0
 
-clearPaddle_loopY:
-    bge $t7, $t4, clearPaddle_end
+clearPaddleFast_loopY:
+    bge $t7, $t4, clearPaddleFast_end
     li $t8, 0
 
-clearPaddle_loopX:
-    bge $t8, $t3, clearPaddle_nextY
+clearPaddleFast_loopX:
+    bge $t8, $t3, clearPaddleFast_nextY
     
     add $t9, $t2, $t7
     add $s0, $t1, $t8
@@ -68,19 +67,17 @@ clearPaddle_loopX:
     sw $t5, 0($s1)
     
     addi $t8, $t8, 1
-    j clearPaddle_loopX
+    j clearPaddleFast_loopX
 
-clearPaddle_nextY:
+clearPaddleFast_nextY:
     addi $t7, $t7, 1
-    j clearPaddle_loopY
+    j clearPaddleFast_loopY
 
-clearPaddle_end:
-    pop_ra()
+clearPaddleFast_end:
     jr $ra
 
-# ==================== DIBUJAR PELOTA ====================
-drawBall:
-    push_ra()  # ← SOLO UN push_ra()
+# ==================== DIBUJAR PELOTA RÁPIDO ====================
+drawBallFast:
     lw $t0, displayAddress
     lw $t1, ballX
     lw $t2, ballY
@@ -92,13 +89,10 @@ drawBall:
     add $t5, $t0, $t5
     
     sw $t3, 0($t5)
-    # ← ELIMINAR EL pop_ra() EXTRA DE AQUÍ
-    pop_ra()   # ← SOLO UN pop_ra() AL FINAL
     jr $ra
 
-# ==================== BORRAR PELOTA ====================
-clearBall:
-    push_ra()  # ← SOLO UN push_ra()
+# ==================== BORRAR PELOTA RÁPIDO ====================
+clearBallFast:
     lw $t0, displayAddress
     lw $t1, ballX
     lw $t2, ballY
@@ -110,6 +104,4 @@ clearBall:
     add $t5, $t0, $t5
     
     sw $t3, 0($t5)
-    # ← ELIMINAR EL pop_ra() EXTRA DE AQUÍ
-    pop_ra()   # ← SOLO UN pop_ra() AL FINAL
     jr $ra

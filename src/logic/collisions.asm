@@ -29,11 +29,16 @@ noPaddleCol:
 
 # ==================== COLISIÓN CON BLOQUES ====================
 checkBlockCollision:
-    push_ra()
-    push_reg($s0)
-    push_reg($s1)
-    push_reg($s2)
-    push_reg($s3)
+    addiu $sp, $sp, -4
+    sw $ra, 0($sp)
+    addiu $sp, $sp, -4
+    sw $s0, 0($sp)
+    addiu $sp, $sp, -4
+    sw $s1, 0($sp)
+    addiu $sp, $sp, -4
+    sw $s2, 0($sp)
+    addiu $sp, $sp, -4
+    sw $s3, 0($sp)
     
     lw $s0, ballX
     lw $s1, ballY
@@ -50,9 +55,7 @@ checkBlock_col:
     bge $t2, $t3, checkBlock_nextRow
     
     # Calcular índice en array: (fila * 10 + col) * 4
-    sll $t4, $t0, 3
-    sll $t5, $t0, 1
-    add $t4, $t4, $t5
+    mul $t4, $t0, 10
     add $t4, $t4, $t2
     sll $t4, $t4, 2
     
@@ -65,14 +68,11 @@ checkBlock_col:
     
     # Calcular posición del bloque
     lw $t7, blockStartX
-    sll $t8, $t2, 2
-    sll $t9, $t2, 1
-    add $t8, $t8, $t9
+    mul $t8, $t2, 6
     add $s2, $t7, $t8
     
     lw $t7, blockStartY
-    add $t8, $t0, $t0
-    add $t8, $t8, $t0
+    mul $t8, $t0, 3
     add $s3, $t7, $t8
     
     # Verificar colisión X
@@ -120,9 +120,14 @@ checkBlock_nextRow:
 
 noBlockCol:
 blockCol_end:
-    pop_reg($s3)
-    pop_reg($s2)
-    pop_reg($s1)
-    pop_reg($s0)
-    pop_ra()
+    lw $s3, 0($sp)
+    addiu $sp, $sp, 4
+    lw $s2, 0($sp)
+    addiu $sp, $sp, 4
+    lw $s1, 0($sp)
+    addiu $sp, $sp, 4
+    lw $s0, 0($sp)
+    addiu $sp, $sp, 4
+    lw $ra, 0($sp)
+    addiu $sp, $sp, 4
     jr $ra

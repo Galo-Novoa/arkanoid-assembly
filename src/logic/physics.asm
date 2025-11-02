@@ -1,6 +1,7 @@
 # ==================== MOVER PELOTA ====================
 moveBall:
-    push_ra()
+    addiu $sp, $sp, -4
+    sw $ra, 0($sp)
     
     # ========== MOVIMIENTO HORIZONTAL ==========
     lw $t0, ballX
@@ -166,9 +167,9 @@ respawn:
     li $t0, 26
     sw $t0, paddleX
     
-    # Pausa de 2 segundos
+    # Pausa más corta
     li $v0, 32
-    li $a0, 2000
+    li $a0, 1000  # 1 segundo en lugar de 2
     syscall
     
     j moveBall_end
@@ -177,5 +178,6 @@ checkBlocks:
     jal checkBlockCollision
 
 moveBall_end:
-    pop_ra()
+    lw $ra, 0($sp)
+    addiu $sp, $sp, 4
     jr $ra
