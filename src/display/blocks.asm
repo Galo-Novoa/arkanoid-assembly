@@ -1,5 +1,3 @@
-
-.text
 # ==================== DIBUJAR TODOS LOS BLOQUES ====================
 drawAllBlocks:
     push_ra()
@@ -15,6 +13,7 @@ drawBlocks_row:
 drawBlocks_col:
     bge $s2, $s3, drawBlocks_nextRow
     
+    # Calcular índice
     sll $t0, $s0, 3
     sll $t1, $s0, 1
     add $t0, $t0, $t1
@@ -47,17 +46,20 @@ drawBlocks_end:
 drawBlock:
     push_ra()
     
+    # Calcular posición X
     lw $t0, blockStartX
     sll $t1, $a0, 2
     sll $t2, $a0, 1
     add $t1, $t1, $t2
     add $t4, $t0, $t1
     
+    # Calcular posición Y
     lw $t0, blockStartY
     add $t1, $a1, $a1
     add $t1, $t1, $a1
     add $t5, $t0, $t1
     
+    # Seleccionar color según fila
     la $t6, blockColor1
     beqz $a1, drawBlock_color
     la $t6, blockColor2

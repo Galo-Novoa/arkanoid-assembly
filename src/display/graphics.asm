@@ -1,6 +1,6 @@
-.text
 # ==================== DIBUJAR PALETA ====================
 drawPaddle:
+    push_ra()
     lw $t0, displayAddress
     lw $t1, paddleX
     lw $t2, paddleY
@@ -35,10 +35,12 @@ drawPaddle_nextY:
     j drawPaddle_loopY
 
 drawPaddle_end:
+    pop_ra()
     jr $ra
 
 # ==================== BORRAR PALETA ====================
 clearPaddle:
+    push_ra()
     lw $t0, displayAddress
     lw $t1, paddleX
     lw $t2, paddleY
@@ -73,10 +75,12 @@ clearPaddle_nextY:
     j clearPaddle_loopY
 
 clearPaddle_end:
+    pop_ra()
     jr $ra
 
 # ==================== DIBUJAR PELOTA ====================
 drawBall:
+    push_ra()  # ← SOLO UN push_ra()
     lw $t0, displayAddress
     lw $t1, ballX
     lw $t2, ballY
@@ -88,10 +92,13 @@ drawBall:
     add $t5, $t0, $t5
     
     sw $t3, 0($t5)
+    # ← ELIMINAR EL pop_ra() EXTRA DE AQUÍ
+    pop_ra()   # ← SOLO UN pop_ra() AL FINAL
     jr $ra
 
 # ==================== BORRAR PELOTA ====================
 clearBall:
+    push_ra()  # ← SOLO UN push_ra()
     lw $t0, displayAddress
     lw $t1, ballX
     lw $t2, ballY
@@ -103,4 +110,6 @@ clearBall:
     add $t5, $t0, $t5
     
     sw $t3, 0($t5)
+    # ← ELIMINAR EL pop_ra() EXTRA DE AQUÍ
+    pop_ra()   # ← SOLO UN pop_ra() AL FINAL
     jr $ra

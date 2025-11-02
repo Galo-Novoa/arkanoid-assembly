@@ -1,6 +1,6 @@
-.text
 # ==================== ENTRADA DE TECLADO ====================
 checkInput:
+    push_ra()  # ← AGREGAR ESTO
     lw $t0, 0xffff0000
     andi $t0, $t0, 0x1
     beqz $t0, input_end
@@ -38,4 +38,5 @@ moveRight:
     sw $t3, paddleX
 
 input_end:
+    pop_ra()  # ← AGREGAR ESTO
     jr $ra

@@ -1,4 +1,3 @@
-.text
 # ==================== COLISIÓN CON PALETA ====================
 checkPaddleCollision:
     lw $t0, ballX
@@ -8,14 +7,17 @@ checkPaddleCollision:
     lw $t4, paddleWidth
     lw $t5, paddleHeight
     
+    # Verificar rango Y
     blt $t1, $t3, noPaddleCol
     add $t6, $t3, $t5
     bge $t1, $t6, noPaddleCol
     
+    # Verificar rango X
     blt $t0, $t2, noPaddleCol
     add $t6, $t2, $t4
     bge $t0, $t6, noPaddleCol
     
+    # ¡COLISIÓN! Calcular posición relativa
     sub $v1, $t0, $t2
     li $v0, 1
     jr $ra
@@ -47,6 +49,7 @@ checkBlock_row:
 checkBlock_col:
     bge $t2, $t3, checkBlock_nextRow
     
+    # Calcular índice en array: (fila * 10 + col) * 4
     sll $t4, $t0, 3
     sll $t5, $t0, 1
     add $t4, $t4, $t5
@@ -56,8 +59,11 @@ checkBlock_col:
     la $t5, blocks
     add $t5, $t5, $t4
     lw $t6, 0($t5)
+    
+    # Si el bloque ya está destruido (0), saltar
     beqz $t6, checkBlock_next
     
+    # Calcular posición del bloque
     lw $t7, blockStartX
     sll $t8, $t2, 2
     sll $t9, $t2, 1
@@ -69,28 +75,35 @@ checkBlock_col:
     add $t8, $t8, $t0
     add $s3, $t7, $t8
     
+    # Verificar colisión X
     blt $s0, $s2, checkBlock_next
     lw $t8, blockWidth
     add $t9, $s2, $t8
     bge $s0, $t9, checkBlock_next
     
+    # Verificar colisión Y
     blt $s1, $s3, checkBlock_next
     lw $t8, blockHeight
     add $t9, $s3, $t8
     bge $s1, $t9, checkBlock_next
     
+    # ¡COLISIÓN CON BLOQUE!
     sw $zero, 0($t5)
+    
     lw $t6, blocksRemaining
     addi $t6, $t6, -1
     sw $t6, blocksRemaining
+    
     lw $t6, score
     addi $t6, $t6, 10
     sw $t6, score
     
+    # Borrar el bloque visualmente
     move $a0, $t2
     move $a1, $t0
     jal eraseBlock
     
+    # Invertir velocidad Y (rebote)
     lw $t6, ballVelY
     sub $t6, $zero, $t6
     sw $t6, ballVelY
