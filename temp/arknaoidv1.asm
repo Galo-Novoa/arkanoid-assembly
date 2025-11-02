@@ -13,7 +13,6 @@
     screenHeight: .word 64
 
 .text
-.globl main
 
 main:
     # Inicialización

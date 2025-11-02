@@ -13,6 +13,27 @@
     blockColor3: .word 0x00FFFF00   # Amarillo
     blockColor4: .word 0x0000FF00   # Verde
     
+    # ==================== MACROS ====================
+    .macro push_ra
+        addi $sp, $sp, -4    # Reservar espacio
+        sw $ra, 0($sp)       # Guardar $ra
+    .end_macro
+
+	.macro pop_ra
+        lw $ra, 0($sp)       # Recuperar $ra  
+        addi $sp, $sp, 4     # Liberar espacio
+	.end_macro
+    
+	.macro push_reg %reg
+   	 addi $sp, $sp, -4    # Reservar espacio
+	    sw %reg, 0($sp)      # Guardar el registro especificado
+	.end_macro
+
+	.macro pop_reg %reg  
+   		 lw %reg, 0($sp)      # Recuperar el registro especificado
+ 		 addi $sp, $sp, 4     # Liberar espacio
+	.end_macro
+    
     # ==================== PALETA (TAMAÑO REDUCIDO) ====================
     paddleX: .word 26               # Centrada (64/2 - 12/2 = 26)
     paddleY: .word 56               # Cerca del fondo
@@ -27,7 +48,7 @@
     ballVelY: .word -1
     
     # ==================== BLOQUES ====================
-    blockWidth: .word 5
+    blockWidth: .word 5		
     blockHeight: .word 2
     blocksPerRow: .word 10
     blockRows: .word 4
@@ -210,8 +231,7 @@ clearBall:
 
 # ==================== MOVER PELOTA ====================
 moveBall:
-    addi $sp, $sp, -4
-    sw $ra, 0($sp)
+    push_ra()                       # ← MACRO REEMPLAZADO
     
     # ========== MOVIMIENTO HORIZONTAL ==========
     lw $t0, ballX
@@ -390,8 +410,7 @@ checkBlocks:
     jal checkBlockCollision
 
 moveBall_end:
-    lw $ra, 0($sp)
-    addi $sp, $sp, 4
+    pop_ra()                        # ← MACRO REEMPLAZADO
     jr $ra
 
 # ==================== COLISIÓN CON PALETA ====================
@@ -427,12 +446,11 @@ noPaddleCol:
 
 # ==================== COLISIÓN CON BLOQUES ====================
 checkBlockCollision:
-    addi $sp, $sp, -20
-    sw $ra, 16($sp)
-    sw $s0, 12($sp)
-    sw $s1, 8($sp)
-    sw $s2, 4($sp)
-    sw $s3, 0($sp)
+    push_ra()                       # ← MACRO REEMPLAZADO
+    push_reg($s0)                   # ← NUEVO MACRO (necesitarías definirlo)
+    push_reg($s1)
+    push_reg($s2)
+    push_reg($s3)
     
     lw $s0, ballX
     lw $s1, ballY
@@ -519,12 +537,11 @@ checkBlock_nextRow:
 
 noBlockCol:
 blockCol_end:
-    lw $s3, 0($sp)
-    lw $s2, 4($sp)
-    lw $s1, 8($sp)
-    lw $s0, 12($sp)
-    lw $ra, 16($sp)
-    addi $sp, $sp, 20
+    pop_reg($s3)                    # ← NUEVO MACRO
+    pop_reg($s2)
+    pop_reg($s1)
+    pop_reg($s0)
+    pop_ra()                        # ← MACRO REEMPLAZADO
     jr $ra
 
 # ==================== ENTRADA DE TECLADO ====================
@@ -574,8 +591,7 @@ input_end:
 
 # ==================== DIBUJAR TODOS LOS BLOQUES ====================
 drawAllBlocks:
-    addi $sp, $sp, -4
-    sw $ra, 0($sp)
+    push_ra()                       # ← MACRO REEMPLAZADO
     
     li $s0, 0                       # Fila
     lw $s1, blockRows
@@ -614,14 +630,12 @@ drawBlocks_nextRow:
     j drawBlocks_row
 
 drawBlocks_end:
-    lw $ra, 0($sp)
-    addi $sp, $sp, 4
+    pop_ra()                        # ← MACRO REEMPLAZADO
     jr $ra
 
 # ==================== DIBUJAR UN BLOQUE ====================
 drawBlock:
-    addi $sp, $sp, -4
-    sw $ra, 0($sp)
+    push_ra()                       # ← MACRO REEMPLAZADO
     
     # Calcular posición X
     lw $t0, blockStartX
@@ -681,14 +695,12 @@ drawBlock_nextY:
     j drawBlock_loopY
 
 drawBlock_end:
-    lw $ra, 0($sp)
-    addi $sp, $sp, 4
+    pop_ra()                        # ← MACRO REEMPLAZADO
     jr $ra
 
 # ==================== BORRAR UN BLOQUE ====================
 eraseBlock:
-    addi $sp, $sp, -4
-    sw $ra, 0($sp)
+    push_ra()                       # ← MACRO REEMPLAZADO
     
     lw $t0, blockStartX
     sll $t1, $a0, 2
@@ -733,6 +745,5 @@ eraseBlock_nextY:
     j eraseBlock_loopY
 
 eraseBlock_done:
-    lw $ra, 0($sp)
-    addi $sp, $sp, 4
+    pop_ra()                        # ← MACRO REEMPLAZADO
     jr $ra
