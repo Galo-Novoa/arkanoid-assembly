@@ -192,12 +192,12 @@ orange_block_sprite: .word
 
 # Tabla de direcciones de sprites de bloques
 block_sprites_table: .word
-    purple_block_sprite,    # OBJ_BLOCK_RED = 1 (usando púrpura como principal)
+    white_block_sprite,    # OBJ_BLOCK_RED = 1 (usando púrpura como principal)
     yellow_block_sprite,    # OBJ_BLOCK_YELLOW = 2
     blue_block_sprite,      # OBJ_BLOCK_BLUE = 3
     green_block_sprite,     # OBJ_BLOCK_GREEN = 4
-    orange_block_sprite,    # OBJ_BLOCK_MAGENTA = 5 (usando naranja)
-    white_block_sprite,     # OBJ_BLOCK_WHITE = 6
+    red_block_sprite,    # OBJ_BLOCK_MAGENTA = 5 (usando naranja)
+    purple_block_sprite,     # OBJ_BLOCK_WHITE = 6
     red_block_sprite,       # OBJ_BLOCK_RED_ARMORED = 7
     yellow_block_sprite,    # OBJ_BLOCK_YELLOW_ARMORED = 8
     blue_block_sprite,     # OBJ_BLOCK_BLUE_ARMORED = 9
