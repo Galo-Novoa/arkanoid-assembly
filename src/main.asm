@@ -2,6 +2,7 @@
 .include "data/messages.asm"
 .include "data/objects_id.asm"
 .include "data/sprites/paddle_sprites.asm"
+.include "data/sprites/block_sprites.asm"  # <--- AÑADIR ESTA LÍNEA
 
 .text
 .globl main
