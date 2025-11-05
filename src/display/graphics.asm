@@ -84,13 +84,32 @@ drawBallFast:
     lw $t2, ballY
     lw $t3, ballColor
     
-    # Calcular offset: (y * 256 + x) * 4
-    sll $t5, $t2, 8      # y * 256
-    add $t5, $t5, $t1    # + x
-    sll $t5, $t5, 2      # * 4
-    add $t5, $t0, $t5    # + dirección base
+    # Dibujar pelota de 6x6 píxeles
+    li $t4, 0  # offset Y
     
-    sw $t3, 0($t5)
+draw_ball_y:
+    li $t5, 0  # offset X
+    
+draw_ball_x:
+    add $t6, $t2, $t4  # Y + offset
+    add $t7, $t1, $t5  # X + offset
+    
+    # Calcular offset: (y * 256 + x) * 4
+    sll $t8, $t6, 8      # y * 256
+    add $t8, $t8, $t7    # + x
+    sll $t8, $t8, 2      # * 4
+    add $t8, $t0, $t8    # + dirección base
+    
+    sw $t3, 0($t8)
+    
+    addi $t5, $t5, 1
+    li $t9, 6
+    blt $t5, $t9, draw_ball_x
+    
+    addi $t4, $t4, 1
+    li $t9, 6
+    blt $t4, $t9, draw_ball_y
+    
     jr $ra
 
 # ==================== BORRAR PELOTA RÁPIDO ====================
@@ -100,10 +119,30 @@ clearBallFast:
     lw $t2, ballY
     lw $t3, bgColor
     
-    sll $t5, $t2, 8      # y * 256
-    add $t5, $t5, $t1    # + x
-    sll $t5, $t5, 2      # * 4
-    add $t5, $t0, $t5    # + dirección base
+    # Borrar área de 6x6 píxeles
+    li $t4, 0  # offset Y
     
-    sw $t3, 0($t5)
+clear_ball_y:
+    li $t5, 0  # offset X
+    
+clear_ball_x:
+    add $t6, $t2, $t4  # Y + offset
+    add $t7, $t1, $t5  # X + offset
+    
+    # Calcular offset: (y * 256 + x) * 4
+    sll $t8, $t6, 8      # y * 256
+    add $t8, $t8, $t7    # + x
+    sll $t8, $t8, 2      # * 4
+    add $t8, $t0, $t8    # + dirección base
+    
+    sw $t3, 0($t8)
+    
+    addi $t5, $t5, 1
+    li $t9, 6
+    blt $t5, $t9, clear_ball_x
+    
+    addi $t4, $t4, 1
+    li $t9, 6
+    blt $t4, $t9, clear_ball_y
+    
     jr $ra

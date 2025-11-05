@@ -66,26 +66,28 @@ checkBlock_col:
     # Si el bloque ya está destruido (0), saltar
     beqz $t6, checkBlock_next
     
-    # Calcular posición del bloque (CONSISTENTE con drawBlock)
+    # Calcular posición del bloque (sin separación)
     lw $t7, blockStartX
-    mul $t8, $t2, 22      # 20px ancho + 2px espacio (IGUAL que drawBlock)
+    mul $t8, $t2, 20      # 20px ancho, sin espacio
     add $s2, $t7, $t8
     
     lw $t7, blockStartY
-    mul $t8, $t0, 10      # 8px alto + 2px espacio (CORREGIDO: era 12, ahora 10)
+    mul $t8, $t0, 8       # 8px alto, sin espacio
     add $s3, $t7, $t8
     
-    # Verificar colisión X
-    blt $s0, $s2, checkBlock_next
+    # Verificar colisión X (considerando hitbox de 6x6 de la pelota)
+    addi $t7, $s0, 5      # X + 5 (hitbox derecha)
+    blt $t7, $s2, checkBlock_next  # Si hitbox derecha < bloque izquierda
     lw $t8, blockWidth
-    add $t9, $s2, $t8
-    bge $s0, $t9, checkBlock_next
+    add $t9, $s2, $t8     # bloque derecha
+    bge $s0, $t9, checkBlock_next  # Si pelota X >= bloque derecha
     
-    # Verificar colisión Y
-    blt $s1, $s3, checkBlock_next
+    # Verificar colisión Y (considerando hitbox de 6x6 de la pelota)
+    addi $t7, $s1, 5      # Y + 5 (hitbox inferior)
+    blt $t7, $s3, checkBlock_next  # Si hitbox inferior < bloque superior
     lw $t8, blockHeight
-    add $t9, $s3, $t8
-    bge $s1, $t9, checkBlock_next
+    add $t9, $s3, $t8     # bloque inferior
+    bge $s1, $t9, checkBlock_next  # Si pelota Y >= bloque inferior
     
     # ¡COLISIÓN CON BLOQUE!
     sw $zero, 0($t5)

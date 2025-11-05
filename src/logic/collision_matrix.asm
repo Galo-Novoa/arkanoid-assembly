@@ -84,13 +84,13 @@ register_blocks_matrix_col:
     
     beqz $t2, register_blocks_matrix_skip
     
-    # Calcular posición del bloque
+    # Calcular posición del bloque (sin separación)
     lw $t3, blockStartX
-    mul $t4, $s2, 22
+    mul $t4, $s2, 20            # 20px ancho, sin espacio
     add $t4, $t3, $t4           # X inicial
     
     lw $t3, blockStartY
-    mul $t5, $s0, 10
+    mul $t5, $s0, 8             # 8px alto, sin espacio
     add $t5, $t3, $t5           # Y inicial
     
     # Determinar ID según fila (color) y tipo

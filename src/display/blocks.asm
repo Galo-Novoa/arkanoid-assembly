@@ -47,14 +47,14 @@ drawBlock:
     addiu $sp, $sp, -4
     sw $ra, 0($sp)
     
-    # Calcular posición X
+    # Calcular posición X (sin separación entre bloques)
     lw $t0, blockStartX
-    mul $t1, $a0, 22      # 20px ancho + 2px espacio
+    mul $t1, $a0, 20      # 20px ancho, sin espacio
     add $t4, $t0, $t1
     
-    # Calcular posición Y
+    # Calcular posición Y (sin separación entre bloques)
     lw $t0, blockStartY
-    mul $t1, $a1, 10      # 8px alto + 2px espacio
+    mul $t1, $a1, 8       # 8px alto, sin espacio
     add $t5, $t0, $t1
     
     # Seleccionar color según fila
@@ -118,12 +118,14 @@ eraseBlock:
     addiu $sp, $sp, -4
     sw $ra, 0($sp)
     
+    # Calcular posición X (sin separación entre bloques)
     lw $t0, blockStartX
-    mul $t1, $a0, 22      # 20px ancho + 2px espacio
+    mul $t1, $a0, 20      # 20px ancho, sin espacio
     add $t4, $t0, $t1
     
+    # Calcular posición Y (sin separación entre bloques)
     lw $t0, blockStartY
-    mul $t1, $a1, 10      # 8px alto + 2px espacio
+    mul $t1, $a1, 8       # 8px alto, sin espacio
     add $t5, $t0, $t1
     
     lw $t0, displayAddress

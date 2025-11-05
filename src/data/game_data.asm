@@ -32,7 +32,7 @@ blockWidth: .word 20
 blockHeight: .word 8
 blocksPerRow: .word 10
 blockRows: .word 6
-blockStartX: .word 18
+blockStartX: .word 28  # Margen lateral de 28px (56px total)
 blockStartY: .word 30
 
 blocks: .word 1,1,1,1,1,1,1,1,1,1

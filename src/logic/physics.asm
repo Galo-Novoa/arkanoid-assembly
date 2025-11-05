@@ -235,22 +235,16 @@ updateBallInMatrix:
     addiu $sp, $sp, -4
     sw $ra, 0($sp)
     
-    # LIMPIAR posición anterior de la pelota
+    # LIMPIAR posición anterior de la pelota (6x6 área)
     jal clearPreviousBallPosition
     
-    # Registrar nueva posición
+    # Registrar nueva posición (6x6 área)
     lw $a0, ballX
     lw $a1, ballY
-    
-    # Verificar que esté dentro de los límites
-    bltz $a0, update_ball_end
-    li $t0, 255
-    bge $a0, $t0, update_ball_end
-    bltz $a1, update_ball_end
-    bge $a1, $t0, update_ball_end
-    
-    lw $a2, OBJ_BALL
-    jal setObjectInMatrix
+    li $a2, 6                   # width
+    li $a3, 6                   # height
+    lw $t0, OBJ_BALL
+    jal fillRectInMatrix
     
 update_ball_end:
     lw $ra, 0($sp)
@@ -271,16 +265,11 @@ clearPreviousBallPosition:
     lw $t1, ballVelY
     sub $a1, $t0, $t1          # Y anterior
     
-    # Verificar límites
-    bltz $a0, clear_prev_end
-    li $t0, 255
-    bge $a0, $t0, clear_prev_end
-    bltz $a1, clear_prev_end
-    bge $a1, $t0, clear_prev_end
-    
-    # Limpiar posición anterior
-    li $a2, 0                   # OBJ_EMPTY
-    jal setObjectInMatrix
+    # Limpiar área anterior (6x6)
+    li $a2, 6                   # width
+    li $a3, 6                   # height
+    li $t0, 0                   # OBJ_EMPTY
+    jal fillRectInMatrix
     
 clear_prev_end:
     lw $ra, 0($sp)
