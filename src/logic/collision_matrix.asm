@@ -332,11 +332,11 @@ updatePaddleInMatrix:
     addiu $sp, $sp, -4
     sw $ra, 0($sp)
     
-    # Limpiar área completa de paleta (y=240-243)
+    # Limpiar área completa de paleta (y=240-247)
     li $a0, 0
     li $a1, 240
     li $a2, 256
-    li $a3, 4
+    li $a3, 8  # Cambiado de 4 a 8
     li $t0, 0                   # OBJ_EMPTY
     jal fillRectInMatrix
     

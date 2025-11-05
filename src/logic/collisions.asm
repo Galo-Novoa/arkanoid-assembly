@@ -7,15 +7,17 @@ checkPaddleCollision:
     lw $t4, paddleWidth
     lw $t5, paddleHeight
     
-    # Verificar rango Y
-    blt $t1, $t3, noPaddleCol
-    add $t6, $t3, $t5
-    bge $t1, $t6, noPaddleCol
+    # Verificar rango Y (considerando hitbox de 6x6 de la pelota)
+    addi $t6, $t1, 5      # Y + 5 (hitbox inferior)
+    blt $t6, $t3, noPaddleCol  # Si hitbox inferior < paleta superior
+    add $t6, $t3, $t5     # paleta inferior
+    bge $t1, $t6, noPaddleCol  # Si pelota Y >= paleta inferior
     
-    # Verificar rango X
-    blt $t0, $t2, noPaddleCol
-    add $t6, $t2, $t4
-    bge $t0, $t6, noPaddleCol
+    # Verificar rango X (considerando hitbox de 6x6 de la pelota)
+    addi $t6, $t0, 5      # X + 5 (hitbox derecha)
+    blt $t6, $t2, noPaddleCol  # Si hitbox derecha < paleta izquierda
+    add $t6, $t2, $t4     # paleta derecha
+    bge $t0, $t6, noPaddleCol  # Si pelota X >= paleta derecha
     
     # ¡COLISIÓN! Calcular posición relativa
     sub $v1, $t0, $t2

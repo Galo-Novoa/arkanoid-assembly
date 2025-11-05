@@ -188,18 +188,18 @@ calculatePaddleBounceAngle:
     lw $t1, paddleX
     sub $t2, $t0, $t1          # Posición relativa en la paleta
     
-    # Dividir paleta en zonas
+    # Dividir paleta en zonas (para 35px de ancho)
     lw $t3, paddleWidth
     
-    li $t4, 8
+    li $t4, 7    # Zona 1: 0-7px
     blt $t2, $t4, zone1
-    li $t4, 16
+    li $t4, 14   # Zona 2: 7-14px
     blt $t2, $t4, zone2
-    li $t4, 24
+    li $t4, 21   # Zona 3: 14-21px
     blt $t2, $t4, zone3
-    li $t4, 32
+    li $t4, 28   # Zona 4: 21-28px
     blt $t2, $t4, zone4
-    j zone5
+    j zone5      # Zona 5: 28-35px
 
 zone1:
     li $t0, -2

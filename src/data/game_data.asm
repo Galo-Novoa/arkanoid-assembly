@@ -15,10 +15,10 @@ blockColor3: .word 0x00FFFF00
 blockColor4: .word 0x0000FF00
 
 # ==================== PALETA ====================
-paddleX: .word 112
+paddleX: .word 110  # Ajustado para centrar mejor con 35px de ancho
 paddleY: .word 240
-paddleWidth: .word 32
-paddleHeight: .word 4
+paddleWidth: .word 35  # Cambiado de 32 a 35
+paddleHeight: .word 8  # Cambiado de 4 a 8
 paddleSpeed: .word 4
 
 # ==================== PELOTA ====================
