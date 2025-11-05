@@ -66,13 +66,13 @@ checkBlock_col:
     # Si el bloque ya está destruido (0), saltar
     beqz $t6, checkBlock_next
     
-    # Calcular posición del bloque
+    # Calcular posición del bloque (CONSISTENTE con drawBlock)
     lw $t7, blockStartX
-    mul $t8, $t2, 22      # 20px ancho + 2px espacio
+    mul $t8, $t2, 22      # 20px ancho + 2px espacio (IGUAL que drawBlock)
     add $s2, $t7, $t8
     
     lw $t7, blockStartY
-    mul $t8, $t0, 12      # 10px alto + 2px espacio
+    mul $t8, $t0, 10      # 8px alto + 2px espacio (CORREGIDO: era 12, ahora 10)
     add $s3, $t7, $t8
     
     # Verificar colisión X

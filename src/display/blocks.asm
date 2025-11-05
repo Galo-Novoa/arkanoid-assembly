@@ -3,21 +3,21 @@ drawAllBlocks:
     addiu $sp, $sp, -4
     sw $ra, 0($sp)
     
-    li $s0, 0
-    lw $s1, blockRows
+    li $s0, 0 # fila actual
+    lw $s1, blockRows # filas totales
 
 drawBlocks_row:
-    bge $s0, $s1, drawBlocks_end
-    li $s2, 0
-    lw $s3, blocksPerRow
+    bge $s0, $s1, drawBlocks_end # if fila >= filas_totales, terminar
+    li $s2, 0 # columna actual
+    lw $s3, blocksPerRow # columnas totales
 
 drawBlocks_col:
-    bge $s2, $s3, drawBlocks_nextRow
+    bge $s2, $s3, drawBlocks_nextRow # if col >= cols_totales, siguiente fila
     
     # Calcular índice
-    mul $t0, $s0, 10
-    add $t0, $t0, $s2
-    sll $t0, $t0, 2
+    mul $t0, $s0, 10    # fila * bloques_por_fila (10)
+    add $t0, $t0, $s2   # + columna
+    sll $t0, $t0, 2     # * 4 (tamaño de palabra)
     
     la $t1, blocks
     add $t1, $t1, $t0

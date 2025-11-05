@@ -1,6 +1,7 @@
 .data
 # ==================== CONFIGURACIÓN ====================
-displayAddress: .word 0x10010000  # Más espacio de memoria
+displayAddress: .word 0x10010000
+collisionMatrix: .word 0x10050000
 screenWidth: .word 256
 screenHeight: .word 256
 
