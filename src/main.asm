@@ -5,7 +5,23 @@
 .globl main
 
 main:
-    # Dibujar todos los bloques al inicio
+    # InicializaciÛn - cargar y dibujar nivel 1
+    jal loadLevel
+    
+    # DEBUG: Mostrar nivel actual
+    li $v0, 4
+    la $a0, msgDebugLevel
+    syscall
+    li $v0, 1
+    lw $a0, currentLevel
+    syscall
+    li $v0, 4
+    la $a0, msgDebugBlocks
+    syscall
+    li $v0, 1
+    lw $a0, blocksRemaining
+    syscall
+    
     jal drawAllBlocks
 
 mainLoop:
@@ -13,7 +29,7 @@ mainLoop:
     jal clearPaddleFast
     jal clearBallFast
     
-    # ========== PROCESAR ENTRADA Y F√çSICA ==========
+    # ========== PROCESAR ENTRADA Y FÕSICA ==========
     jal checkInput
     jal moveBall
 
@@ -21,18 +37,19 @@ mainLoop:
     jal drawPaddleFast
     jal drawBallFast
 
-    # ========== VERIFICAR VICTORIA ==========
+    # ========== VERIFICAR VICTORIA DEL NIVEL ==========
     lw $t0, blocksRemaining
-    beqz $t0, gameWon
+    beqz $t0, levelComplete
 
-    # ========== DELAY PARA 256x256 ==========
+    # ========== DELAY ==========
     li $v0, 32
-    li $a0, 20  # 20ms para mejor rendimiento en pantalla grande
+    li $a0, 8  # Reducido de 20ms a 8ms para mejor fluidez
     syscall
 
     j mainLoop
 
-gameWon:
+levelComplete:
+    # Mostrar mensaje de nivel completado
     li $v0, 4
     la $a0, msgWin
     syscall
@@ -45,12 +62,24 @@ gameWon:
     lw $a0, score
     syscall
     
-    li $v0, 10
+    # Pausa antes de siguiente nivel
+    li $v0, 32
+    li $a0, 2000
     syscall
+    
+    # Cargar siguiente nivel
+    jal nextLevel
+    
+    # Redibujar pantalla con nuevo nivel
+    jal clearScreen
+    jal drawAllBlocks
+    
+    j mainLoop
 
-# Los archivos con implementaciones VAN DESPU√âS de main
+# Los archivos con implementaciones VAN DESPU…S de main
 .include "display/graphics.asm"
 .include "display/blocks.asm"
+.include "logic/levels.asm"
 .include "input/keyboard.asm"
 .include "logic/physics.asm"
 .include "logic/collisions.asm"

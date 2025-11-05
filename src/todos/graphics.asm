@@ -1,23 +1,5 @@
 # ==================== FUNCIONES RÁPIDAS ====================
 
-# ==================== LIMPIAR PANTALLA ====================
-clearScreen:
-    lw $t0, displayAddress
-    lw $t1, bgColor
-    li $t2, 65536           # 256 * 256 píxeles
-    
-clearScreen_loop:
-    beqz $t2, clearScreen_end
-    sw $t1, 0($t0)
-    addiu $t0, $t0, 4
-    addi $t2, $t2, -1
-    j clearScreen_loop
-
-clearScreen_end:
-    jr $ra
-
-# ... (el resto de tus funciones de graphics.asm existentes)
-
 # ==================== DIBUJAR PALETA RÁPIDO ====================
 drawPaddleFast:
     lw $t0, displayAddress

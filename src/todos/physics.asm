@@ -153,14 +153,14 @@ respawn:
     lw $a0, lives
     syscall
     
-    # Resetear posiciones con mayor velocidad
+    # Resetear posiciones
     li $t0, 128
     sw $t0, ballX
     li $t0, 120
     sw $t0, ballY
-    li $t0, 3    # Aumentado de 2 a 3
+    li $t0, 2
     sw $t0, ballVelX
-    li $t0, -3   # Aumentado de -2 a -3
+    li $t0, -2
     sw $t0, ballVelY
     
     # Centrar paleta

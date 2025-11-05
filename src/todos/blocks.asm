@@ -14,22 +14,19 @@ drawBlocks_row:
 drawBlocks_col:
     bge $s2, $s3, drawBlocks_nextRow
     
-    # Calcular índice: (fila * 10 + col) * 4
-    sll $t0, $s0, 3          # fila * 8
-    sll $t1, $s0, 1          # fila * 2  
-    add $t0, $t0, $t1        # fila * 10
-    add $t0, $t0, $s2        # + col
-    sll $t0, $t0, 2          # * 4
+    # Calcular índice
+    mul $t0, $s0, 10
+    add $t0, $t0, $s2
+    sll $t0, $t0, 2
     
     la $t1, blocks
     add $t1, $t1, $t0
-    lw $t2, 0($t1)           # tipo de bloque (0,1,2)
+    lw $t2, 0($t1)
     
-    beqz $t2, drawBlocks_skip  # saltar si es 0 (vacío)
+    beqz $t2, drawBlocks_skip
     
     move $a0, $s2
     move $a1, $s0
-    move $a2, $t2            # pasar tipo de bloque
     jal drawBlock
 
 drawBlocks_skip:
@@ -46,32 +43,21 @@ drawBlocks_end:
     jr $ra
 
 # ==================== DIBUJAR UN BLOQUE ====================
-# $a0 = col, $a1 = fila, $a2 = tipo (1=destructible, 2=indestructible)
 drawBlock:
     addiu $sp, $sp, -4
     sw $ra, 0($sp)
     
-    # Calcular posición X: startX + col * 22
+    # Calcular posición X
     lw $t0, blockStartX
-    sll $t1, $a0, 4          # col * 16
-    sll $t2, $a0, 2          # col * 4
-    add $t1, $t1, $t2        # col * 20
-    sll $t2, $a0, 1          # col * 2
-    add $t1, $t1, $t2        # col * 22
+    mul $t1, $a0, 22      # 20px ancho + 2px espacio
     add $t4, $t0, $t1
     
-    # Calcular posición Y: startY + fila * 10
+    # Calcular posición Y
     lw $t0, blockStartY
-    sll $t1, $a1, 3          # fila * 8
-    sll $t2, $a1, 1          # fila * 2
-    add $t1, $t1, $t2        # fila * 10
+    mul $t1, $a1, 10      # 8px alto + 2px espacio
     add $t5, $t0, $t1
     
-    # Seleccionar color según tipo
-    li $t6, 2
-    beq $a2, $t6, drawBlock_indestructible
-    
-    # Bloque destructible - color según fila
+    # Seleccionar color según fila
     la $t6, blockColor1
     beqz $a1, drawBlock_color
     la $t6, blockColor2
@@ -87,10 +73,6 @@ drawBlock:
     li $t7, 4
     beq $a1, $t7, drawBlock_color
     la $t6, blockColor2
-    j drawBlock_color
-
-drawBlock_indestructible:
-    la $t6, blockColorIndestructible
 
 drawBlock_color:
     lw $t6, 0($t6)
@@ -136,38 +118,12 @@ eraseBlock:
     addiu $sp, $sp, -4
     sw $ra, 0($sp)
     
-    # Solo borrar si es destructible
-    # Calcular índice: (fila * 10 + col) * 4
-    sll $t0, $a1, 3          # fila * 8
-    sll $t1, $a1, 1          # fila * 2  
-    add $t0, $t0, $t1        # fila * 10
-    add $t0, $t0, $a0        # + col
-    sll $t0, $t0, 2          # * 4
-    
-    la $t1, blocks
-    add $t1, $t1, $t0
-    lw $t2, 0($t1)           # tipo de bloque
-    
-    # Solo borrar si es destructible (tipo 1)
-    li $t3, 1
-    bne $t2, $t3, eraseBlock_end
-    
-    # Marcar como vacío
-    sw $zero, 0($t1)
-    
-    # Calcular posición para borrar visualmente
     lw $t0, blockStartX
-    sll $t1, $a0, 4          # col * 16
-    sll $t2, $a0, 2          # col * 4
-    add $t1, $t1, $t2        # col * 20
-    sll $t2, $a0, 1          # col * 2
-    add $t1, $t1, $t2        # col * 22
+    mul $t1, $a0, 22      # 20px ancho + 2px espacio
     add $t4, $t0, $t1
     
     lw $t0, blockStartY
-    sll $t1, $a1, 3          # fila * 8
-    sll $t2, $a1, 1          # fila * 2
-    add $t1, $t1, $t2        # fila * 10
+    mul $t1, $a1, 10      # 8px alto + 2px espacio
     add $t5, $t0, $t1
     
     lw $t0, displayAddress
@@ -202,7 +158,6 @@ eraseBlock_nextY:
     j eraseBlock_loopY
 
 eraseBlock_done:
-eraseBlock_end:
     lw $ra, 0($sp)
     addiu $sp, $sp, 4
     jr $ra

@@ -45,10 +45,9 @@ checkBlockCollision:
     
     li $t0, 0
     lw $t1, blockRows
-    li $s4, 0  # Flag de colisión
 
 checkBlock_row:
-    bge $t0, $t1, checkBlock_end
+    bge $t0, $t1, noBlockCol
     li $t2, 0
     lw $t3, blocksPerRow
 
@@ -56,32 +55,24 @@ checkBlock_col:
     bge $t2, $t3, checkBlock_nextRow
     
     # Calcular índice en array: (fila * 10 + col) * 4
-    sll $t4, $t0, 3          # fila * 8
-    sll $t5, $t0, 1          # fila * 2
-    add $t4, $t4, $t5        # fila * 10
-    add $t4, $t4, $t2        # + col
-    sll $t4, $t4, 2          # * 4
+    mul $t4, $t0, 10
+    add $t4, $t4, $t2
+    sll $t4, $t4, 2
     
     la $t5, blocks
     add $t5, $t5, $t4
-    lw $t6, 0($t5)           # tipo de bloque (0,1,2)
+    lw $t6, 0($t5)
     
-    # Si el bloque está vacío (0), saltar
+    # Si el bloque ya está destruido (0), saltar
     beqz $t6, checkBlock_next
     
     # Calcular posición del bloque
     lw $t7, blockStartX
-    sll $t8, $t2, 4          # col * 16
-    sll $t9, $t2, 2          # col * 4
-    add $t8, $t8, $t9        # col * 20
-    sll $t9, $t2, 1          # col * 2
-    add $t8, $t8, $t9        # col * 22
+    mul $t8, $t2, 22      # 20px ancho + 2px espacio
     add $s2, $t7, $t8
     
     lw $t7, blockStartY
-    sll $t8, $t0, 3          # fila * 8
-    sll $t9, $t0, 1          # fila * 2
-    add $t8, $t8, $t9        # fila * 10
+    mul $t8, $t0, 12      # 10px alto + 2px espacio
     add $s3, $t7, $t8
     
     # Verificar colisión X
@@ -97,13 +88,7 @@ checkBlock_col:
     bge $s1, $t9, checkBlock_next
     
     # ¡COLISIÓN CON BLOQUE!
-    li $s4, 1  # Marcar que hubo colisión
-    
-    li $t7, 1
-    bne $t6, $t7, block_indestructible
-    
-    # BLOQUE DESTRUCTIBLE
-    sw $zero, 0($t5)         # marcar como destruido
+    sw $zero, 0($t5)
     
     lw $t6, blocksRemaining
     addi $t6, $t6, -1
@@ -118,21 +103,12 @@ checkBlock_col:
     move $a1, $t0
     jal eraseBlock
     
-    j block_bounce
-
-block_indestructible:
-    # BLOQUE INDESTRUCTIBLE - solo rebote, no se destruye
-    lw $t6, score
-    addi $t6, $t6, 5         # +5 puntos por rebote
-    sw $t6, score
-
-block_bounce:
     # Invertir velocidad Y (rebote)
     lw $t6, ballVelY
     sub $t6, $zero, $t6
     sw $t6, ballVelY
     
-    j checkBlock_end  # Salir después de primera colisión
+    j blockCol_end
 
 checkBlock_next:
     addi $t2, $t2, 1
@@ -142,7 +118,8 @@ checkBlock_nextRow:
     addi $t0, $t0, 1
     j checkBlock_row
 
-checkBlock_end:
+noBlockCol:
+blockCol_end:
     lw $s3, 0($sp)
     addiu $sp, $sp, 4
     lw $s2, 0($sp)
