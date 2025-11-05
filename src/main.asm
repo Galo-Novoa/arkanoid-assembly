@@ -1,6 +1,7 @@
 .include "data/game_data.asm"
 .include "data/messages.asm"
 .include "data/objects_id.asm"
+.include "data/sprites/paddle_sprites.asm"
 
 .text
 .globl main

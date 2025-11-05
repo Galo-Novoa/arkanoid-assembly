@@ -1,34 +1,55 @@
 # ==================== FUNCIONES RÁPIDAS ====================
 
-# ==================== DIBUJAR PALETA RÁPIDO ====================
+# ==================== DIBUJAR PALETA RÁPIDO CON SPRITE ====================
 drawPaddleFast:
+    addiu $sp, $sp, -4
+    sw $ra, 0($sp)
+    
     lw $t0, displayAddress
     lw $t1, paddleX
     lw $t2, paddleY
-    lw $t3, paddleWidth
-    lw $t4, paddleHeight
-    lw $t5, paddleColor
+    la $t3, paddle_sprite      # Dirección del sprite
     
-    li $t7, 0
+    # Tamaño del sprite (35x9)
+    li $t4, 35                 # ancho
+    li $t5, 9                  # alto
+    
+    li $t7, 0                  # contador filas
 
 drawPaddleFast_loopY:
-    bge $t7, $t4, drawPaddleFast_end
-    li $t8, 0
+    bge $t7, $t5, drawPaddleFast_end
+    li $t8, 0                  # contador columnas
 
 drawPaddleFast_loopX:
-    bge $t8, $t3, drawPaddleFast_nextY
+    bge $t8, $t4, drawPaddleFast_nextY
     
-    add $t9, $t2, $t7
-    add $s0, $t1, $t8
+    # Calcular posición en pantalla
+    add $t9, $t2, $t7          # Y + offset_y
+    add $s0, $t1, $t8          # X + offset_x
     
-    # Calcular offset: (y * 256 + x) * 4
-    sll $s1, $t9, 8      # y * 256
-    add $s1, $s1, $s0    # + x
-    sll $s1, $s1, 2      # * 4
-    add $s1, $t0, $s1    # + dirección base
+    # Calcular offset en display: (y * 256 + x) * 4
+    sll $s1, $t9, 8            # y * 256
+    add $s1, $s1, $s0          # + x
+    sll $s1, $s1, 2            # * 4
+    add $s1, $t0, $s1          # + dirección base
     
-    sw $t5, 0($s1)
+    # Calcular posición en sprite: (y * sprite_width + x) * 4
+    mul $s2, $t7, 35           # y * 35
+    add $s2, $s2, $t8          # + x
+    sll $s2, $s2, 2            # * 4
+    add $s2, $t3, $s2          # + dirección sprite
     
+    # Cargar color del sprite
+    lw $s3, 0($s2)
+    
+    # Solo dibujar si no es transparente (negro)
+    li $s4, 0x000000
+    beq $s3, $s4, drawPaddleFast_skip
+    
+    # Dibujar pixel
+    sw $s3, 0($s1)
+
+drawPaddleFast_skip:
     addi $t8, $t8, 1
     j drawPaddleFast_loopX
 
@@ -37,35 +58,45 @@ drawPaddleFast_nextY:
     j drawPaddleFast_loopY
 
 drawPaddleFast_end:
+    lw $ra, 0($sp)
+    addiu $sp, $sp, 4
     jr $ra
 
 # ==================== BORRAR PALETA RÁPIDO ====================
 clearPaddleFast:
+    addiu $sp, $sp, -4
+    sw $ra, 0($sp)
+    
     lw $t0, displayAddress
     lw $t1, paddleX
     lw $t2, paddleY
-    lw $t3, paddleWidth
-    lw $t4, paddleHeight
-    lw $t5, bgColor
+    lw $t3, bgColor
     
-    li $t7, 0
+    # Tamaño del sprite (35x9)
+    li $t4, 35                 # ancho
+    li $t5, 9                  # alto
+    
+    li $t7, 0                  # contador filas
 
 clearPaddleFast_loopY:
-    bge $t7, $t4, clearPaddleFast_end
-    li $t8, 0
+    bge $t7, $t5, clearPaddleFast_end
+    li $t8, 0                  # contador columnas
 
 clearPaddleFast_loopX:
-    bge $t8, $t3, clearPaddleFast_nextY
+    bge $t8, $t4, clearPaddleFast_nextY
     
-    add $t9, $t2, $t7
-    add $s0, $t1, $t8
+    # Calcular posición en pantalla
+    add $t9, $t2, $t7          # Y + offset_y
+    add $s0, $t1, $t8          # X + offset_x
     
-    sll $s1, $t9, 8      # y * 256
-    add $s1, $s1, $s0    # + x
-    sll $s1, $s1, 2      # * 4
-    add $s1, $t0, $s1    # + dirección base
+    # Calcular offset en display: (y * 256 + x) * 4
+    sll $s1, $t9, 8            # y * 256
+    add $s1, $s1, $s0          # + x
+    sll $s1, $s1, 2            # * 4
+    add $s1, $t0, $s1          # + dirección base
     
-    sw $t5, 0($s1)
+    # Borrar pixel
+    sw $t3, 0($s1)
     
     addi $t8, $t8, 1
     j clearPaddleFast_loopX
@@ -75,6 +106,8 @@ clearPaddleFast_nextY:
     j clearPaddleFast_loopY
 
 clearPaddleFast_end:
+    lw $ra, 0($sp)
+    addiu $sp, $sp, 4
     jr $ra
 
 # ==================== DIBUJAR PELOTA RÁPIDO ====================

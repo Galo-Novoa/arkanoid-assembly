@@ -188,8 +188,8 @@ calculatePaddleBounceAngle:
     lw $t1, paddleX
     sub $t2, $t0, $t1          # Posición relativa en la paleta
     
-    # Dividir paleta en zonas (para 35px de ancho)
-    lw $t3, paddleWidth
+    # Dividir paleta en zonas (para 35px de ancho del sprite)
+    li $t3, 35                 # ancho del sprite
     
     li $t4, 7    # Zona 1: 0-7px
     blt $t2, $t4, zone1

@@ -332,19 +332,19 @@ updatePaddleInMatrix:
     addiu $sp, $sp, -4
     sw $ra, 0($sp)
     
-    # Limpiar área completa de paleta (y=240-247)
+    # Limpiar área completa donde puede estar la paleta (y=240-248)
     li $a0, 0
     li $a1, 240
     li $a2, 256
-    li $a3, 8  # Cambiado de 4 a 8
+    li $a3, 9                   # 9px de alto (tamaño del sprite)
     li $t0, 0                   # OBJ_EMPTY
     jal fillRectInMatrix
     
-    # Dibujar paleta en nueva posición
+    # Dibujar paleta en nueva posición (usando el sprite completo)
     lw $a0, paddleX
     lw $a1, paddleY
-    lw $a2, paddleWidth
-    lw $a3, paddleHeight
+    li $a2, 35                  # ancho del sprite
+    li $a3, 9                   # alto del sprite
     lw $t0, OBJ_PADDLE
     jal fillRectInMatrix
     
