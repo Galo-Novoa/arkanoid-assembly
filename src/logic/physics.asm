@@ -235,14 +235,14 @@ updateBallInMatrix:
     addiu $sp, $sp, -4
     sw $ra, 0($sp)
     
-    # LIMPIAR posición anterior de la pelota (6x6 área)
+    # LIMPIAR posición anterior de la pelota (6x6 área - tamaño del sprite)
     jal clearPreviousBallPosition
     
-    # Registrar nueva posición (6x6 área)
+    # Registrar nueva posición (6x6 área - tamaño del sprite)
     lw $a0, ballX
     lw $a1, ballY
-    li $a2, 6                   # width
-    li $a3, 6                   # height
+    li $a2, 6                   # width (tamaño del sprite)
+    li $a3, 6                   # height (tamaño del sprite)
     lw $t0, OBJ_BALL
     jal fillRectInMatrix
     
@@ -265,7 +265,7 @@ clearPreviousBallPosition:
     lw $t1, ballVelY
     sub $a1, $t0, $t1          # Y anterior
     
-    # Limpiar área anterior (6x6)
+    # Limpiar área anterior (6x6 - tamaño del sprite)
     li $a2, 6                   # width
     li $a3, 6                   # height
     li $t0, 0                   # OBJ_EMPTY

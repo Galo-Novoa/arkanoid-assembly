@@ -2,7 +2,8 @@
 .include "data/messages.asm"
 .include "data/objects_id.asm"
 .include "data/sprites/paddle_sprites.asm"
-.include "data/sprites/block_sprites.asm"  # <--- AÑADIR ESTA LÍNEA
+.include "data/sprites/block_sprites.asm"
+.include "data/sprites/ball_sprite.asm"  # <--- AÑADIR ESTA LÍNEA
 
 .text
 .globl main
@@ -33,7 +34,7 @@ mainLoop:
 
     # ========== DIBUJAR ELEMENTOS NUEVOS ==========
     jal drawPaddleFast
-    jal drawBallFast
+    jal drawBallFast           # Ahora usa el sprite
 
     # ========== VERIFICAR VICTORIA ==========
     lw $t0, blocksRemaining
